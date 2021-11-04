@@ -105,62 +105,6 @@ text(2,44,"Enccoding Error",srt=90,cex=0.8)
 dev.off()
 
 
-# Plot Results (tiff)
-tiff(file = here("figures","figure2_richnessdiversity.tiff"), width = 8, height = 9, units = "in", res = 300)
-
-par(mfrow=c(2,1))
-xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
-
-# Diversity
-ys.div=(c(res.decode.div,res.encode.div,res.wf.div))
-
-lo.div=quantile(res.wf.div,0.025)
-hi.div=quantile(res.wf.div,0.975)
-col.div=vector(length=length(ys.div))
-
-col.div[ys.div>=lo.div&ys.div<=hi.div]=rgb(0,0,0,0.05)
-col.div[ys.div<=lo.div]=add.alpha("royalblue",0.05)
-col.div[ys.div>=hi.div]=add.alpha("indianred",0.05)
-
-plot(xs,ys.div,col=col.div,pch=20,axes=F,xlab="",ylab="Diversity")
-abline(h=c(lo.div,hi.div),col=c("royalblue","indianred"),lty=4)
-axis(side=1,at=c(1.5,4.5,7.5,10.5,14),labels=c(N,n.objects))
-mtext(side=1,line=2.5,"N")
-axis(side=2)
-axis(side=3,at=c(1.5,4.5,7.5,10.5,14),labels=c(n.objects/N,"NA\n (Wright-Fisher)"))
-mtext(side=3,line=2.5,expression(lambda))
-box()
-
-text(4,0.2,"Decoding Error",srt=90,cex=0.8)
-text(5,0.2,"Enccoding Error",srt=90,cex=0.8)
-
-# Richness
-ys.k=(c(res.decode.k,res.encode.k,res.wf.k))
-
-lo.k=quantile(res.wf.k,0.025)
-hi.k=quantile(res.wf.k,0.975)
-col.k=vector(length=length(ys.k))
-
-col.k[ys.k>=lo.k&ys.k<=hi.k]=rgb(0,0,0,0.05)
-col.k[ys.k<=lo.k]=add.alpha("royalblue",0.05)
-col.k[ys.k>=hi.k]=add.alpha("indianred",0.05)
-
-plot(xs,ys.k,col=col.k,pch=20,axes=F,xlab="",ylab="Richness (k)")
-abline(h=c(lo.k,hi.k),col=c("royalblue","indianred"),lty=4)
-axis(side=1,at=c(1.5,4.5,7.5,10.5,14),labels=c(N,n.objects))
-mtext(side=1,line=2.5,"N")
-axis(side=2)
-axis(side=3,at=c(1.5,4.5,7.5,10.5,14),labels=c(n.objects/N,"NA\n (Wright-Fisher)"))
-mtext(side=3,line=2.5,expression(lambda))
-box()
-
-text(1,44,"Decoding Error",srt=90,cex=0.8)
-text(2,44,"Enccoding Error",srt=90,cex=0.8)
-dev.off()
-
-
-
-
 # Experiment 2 ----
 
 # parameter setting
@@ -257,30 +201,6 @@ legend("topright",legend=c("Object-mediated with encoding error","Object-mediate
 dev.off()
 
 
-## Estimates of b (tiff)
-tiff(file = here("figures","figure3_turnover_b_estimate.tiff"), width = 7, height = 5,units = "in", res = 300)
-
-plot(0,0,type="n",ylim=range(c(wf.b,encode.b,decode.b)),xlim=c(0.5,14.5),axes=F,xlab="",ylab="")
-abline(h=0.86,lty=4)
-axis(side=1,at=c(1.5,4.5,7.5,10.5,14),labels=c(N,n.objects))
-mtext(side=1,line=2.5,"N")
-axis(side=2)
-axis(side=3,at=c(1.5,4.5,7.5,10.5,14),labels=c(n.objects/N,"NA\n (Wright-Fisher)"))
-mtext(side=3,line=2.5,expression(lambda))
-box()     
-arrows(x0=c(1,4,7,10),x1=c(1,4,7,10),y0=encode.b.lo,y1=encode.b.hi,lty=1,lwd=2,length=0,col="indianred")
-points(c(1,4,7,10),encode.b.mean,pch=20,col="indianred",cex=1.5)
-arrows(x0=c(2,5,8,11),x1=c(2,5,8,11),y0=decode.b.lo,y1=decode.b.hi,lty=1,lwd=2,length=0,col="royalblue")
-points(c(2,5,8,11),decode.b.mean,pch=20,col="royalblue",cex=1.5)
-arrows(x0=14,x1=14,y0=wf.b.lo,y1=wf.b.hi,lwd=2,length=0)
-points(14,wf.b.mean,pch=20,cex=1.5)
-legend("topright",legend=c("Object-mediated with encoding error","Object-mediated with decoding error","Wright-Fisher"),lty=c(1),pch=20,col=c("indianred","royalblue","black"),cex=0.7)
-dev.off()
-
-
-
-
-
 ## Turnover Profile (pdf)
 pdf(file = here("figures","figure4_turnover_profile.pdf"), width = 9, height = 5)
 par(mfrow=c(1,2))
@@ -306,30 +226,6 @@ for (i in 1:length(N))
 dev.off()
 
 
-
-## Turnover Profile (tiff)
-tiff(file = here("figure","figure4_turnover_profile.tiff"), width = 9, height = 5,units = "in", res = 300)
-par(mfrow=c(1,2))
-plot(1:10,apply(wf.rates,1,mean,na.rm=TRUE),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(encode.rates)),na.rm=TRUE),main="Encoding Error")
-arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
-cc <- brewer.pal(length(N),"Set1") 
-for (i in 1:length(N))
-{
-  lines(1:10,apply(encode.rates[[i]],1,mean,na.rm=TRUE),type="b",pch=20,col=cc[i])  
-  arrows(x0=1:10,x1=1:10,y0=apply(encode.rates[[i]],1,quantile,0.025,na.rm=TRUE),y1=apply(encode.rates[[i]],1,quantile,0.975,na.rm=TRUE),length=0,col=cc[i])
-}
-legend("topleft",legend=legItems.turnover,col=c(cc,"black"),pch=20,lty=1,cex=0.8,bty="n")
-
-plot(1:10,apply(wf.rates,1,mean,na.rm=TRUE),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(decode.rates)),na.rm=TRUE),main="Decoding Error")
-arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
-
-cc <- brewer.pal(length(N),"Set1") 
-for (i in 1:length(N))
-{
-  lines(1:10,apply(decode.rates[[i]],1,mean,na.rm=TRUE),type="b",pch=20,col=cc[i])  
-  arrows(x0=1:10,x1=1:10,y0=apply(decode.rates[[i]],1,quantile,0.025,na.rm=TRUE),y1=apply(decode.rates[[i]],1,quantile,0.975,na.rm=TRUE),length=0,col=cc[i])
-}
-dev.off()
 
 # Experiment 3 ----
 
@@ -361,21 +257,6 @@ legend("bottomleft",legend=c(expression(paste("N=300; ",mu,"=0.01")),expression(
 dev.off()
 
 
-# WF (tiff)
-tiff(file = here("figures","figure1_wrightfisher_progeny.tiff"), width = 9, height = 5, units = "in", res = 300)
-
-par(mfrow=c(1,2))
-plot(wf.prog.n300.m01$d2,pch=20,log="xy",ylab="Probability P(k) of number variants >= k",xlab="k",col="darkgrey",type="b")
-lines(wf.prog.n1000.m01$d2,pch=2,col="indianred",type="b")
-lines(wf.prog.n3000.m01$d2,pch=3,col="royalblue",type="b")
-legend("bottomleft",legend=c(expression(paste("N=300; ",mu,"=0.01")),expression(paste("N=1000; ",mu,"=0.01")),expression(paste("N=3000; ",mu,"=0.01"))),pch=c(20,2,3),col=c("darkgrey","indianred","royalblue"),bty="n")
-
-
-plot(wf.prog.n300.m01$d2,pch=20,log="xy",ylab="Probability P(k) of number variants >= k",xlab="k",col="grey",type="b")
-lines(wf.prog.n1000.m005$d2,pch=2,col="indianred",type="b")
-lines(wf.prog.n3000.m001$d2,pch=3,col="royalblue",type="b")
-legend("bottomleft",legend=c(expression(paste("N=300; ",mu,"=0.01")),expression(paste("N=300; ",mu,"=0.005")),expression(paste("N=300; ",mu,"=0.001"))),pch=c(20,2,3),col=c("darkgrey","indianred","royalblue"),bty="n")                                             
-dev.off()
 
 #Progeny Distribution under object-mediated transmission
 
@@ -458,46 +339,3 @@ for (i in 1:length(encode.prog.fixobjects))
 lines(wf.prog.n1000.m01$d2,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny2,col=c(1,cc),pch=c(NA,rep(20,length(N))),lty=c(4,rep(NA,length(N))),lwd=c(2,rep(NA,length(N))),bty="n")
 dev.off()
-
-
-
-# Plot Results (tiff)
-tiff(file = here("figures","figure5_objectmediated_progeny.tiff"), width = 9, height = 9, units = "in", res = 300)
-
-par(mfrow=c(2,2))
-# (decoding error)
-cc <- brewer.pal(length(lambda),'Set1')
-plot(wf.prog.n300.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="a")
-for (i in 1:length(decode.prog.varlambda))
-{
-  lines(decode.prog.varlambda[[i]]$d2, type="b",pch=20,col=cc[i])
-}
-lines(wf.prog.n300.m01$d2,lty=4,lwd=2)
-legend("bottomleft",legend=legItems.progeny1,col=c(1,cc),pch=c(NA,rep(20,length(lambda))),lty=c(4,rep(NA,length(lambda))),lwd=c(2,rep(NA,length(lambda))),bty="n")
-
-plot(wf.prog.n1000.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="b")
-for (i in 1:length(decode.prog.fixobjects))
-{
-  lines(decode.prog.fixobjects[[i]]$d2, type="b",pch=20,col=cc[i])
-}
-lines(wf.prog.n1000.m01$d2,lty=4,lwd=2)
-legend("bottomleft",legend=legItems.progeny2,col=c(1,cc),pch=c(NA,rep(20,length(N))),lty=c(4,rep(NA,length(N))),lwd=c(2,rep(NA,length(N))),bty="n")
-
-# (encoding error)
-plot(wf.prog.n300.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="c")
-for (i in 1:length(encode.prog.varlambda))
-{
-  lines(encode.prog.varlambda[[i]]$d2, type="b",pch=20,col=cc[i])
-}
-lines(wf.prog.n300.m01$d2,lty=4,lwd=2)
-legend("bottomleft",legend=legItems.progeny1,col=c(1,cc),pch=c(NA,rep(20,length(lambda))),lty=c(4,rep(NA,length(lambda))),lwd=c(2,rep(NA,length(lambda))),bty="n")
-
-plot(wf.prog.n1000.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="d")
-for (i in 1:length(encode.prog.fixobjects))
-{
-  lines(encode.prog.fixobjects[[i]]$d2, type="b",pch=20,col=cc[i])
-}
-lines(wf.prog.n1000.m01$d2,lty=4,lwd=2)
-legend("bottomleft",legend=legItems.progeny2,col=c(1,cc),pch=c(NA,rep(20,length(N))),lty=c(4,rep(NA,length(N))),lwd=c(2,rep(NA,length(N))),bty="n")
-dev.off()
-
