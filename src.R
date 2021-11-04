@@ -1,7 +1,8 @@
+### Utility Functions ----
 
-### Utility Functions ###
-
-#Utility Function for counting cases
+#Counting cases number of defined cases
+#x... vector
+#cases ... unique cases to be counted
 instances <- function(x,cases)
 {
   x <- c(x,cases)
@@ -9,6 +10,8 @@ instances <- function(x,cases)
 }
 
 #Compute turnover rate from frequency matrix
+#mat ... frequency matrix
+#top ... the rank threshold withint which the turnover rate is computed
 turnover <- function(mat,top)
 {
   z<-matrix(NA,nrow=c(nrow(mat)-1),ncol=top)
