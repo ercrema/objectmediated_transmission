@@ -1,12 +1,18 @@
-#Source Functions
-source('./src.R')
+# General Setup ----
 # Load Required Packages
+library(here)
 library(foreach)
 library(doParallel)
 library(RColorBrewer)
+
+#Source Utility Functions
+source('src.R')
+
 # Set Number of Cores 
 ncores <- 6
-#### Experiment 1 
+
+
+# Experiment 1 ----
 
 # parameter settings:
 nsim = 1000 #number of repetitions for each parameter combination
@@ -46,8 +52,7 @@ stopCluster(cl)
 
 
 # Plot Results (pdf)
-
-pdf(file = "../figures/richnessdiversity.pdf", width = 8, height = 9)
+pdf(file = here("figures","figure2_richnessdiversity.pdf"), width = 8, height = 9)
 
 par(mfrow=c(2,1))
 xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
@@ -101,8 +106,7 @@ dev.off()
 
 
 # Plot Results (tiff)
-
-tiff(file = "../figures/richnessdiversity.tiff", width = 8, height = 9, units = "in", res = 300)
+tiff(file = here("figures","figure2_richnessdiversity.tiff"), width = 8, height = 9, units = "in", res = 300)
 
 par(mfrow=c(2,1))
 xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
@@ -157,7 +161,7 @@ dev.off()
 
 
 
-#### Experiment 2
+# Experiment 2 ----
 
 # parameter setting
 nsim = 100 #number of repetitions for each parameter combination
@@ -233,7 +237,7 @@ wf.b.lo=quantile(wf.b,0.025)
 
 # Plot Results
 ## Estimates of b (pdf)
-pdf(file = "../figures/turnover_b_estimate.pdf", width = 7, height = 5)
+pdf(file = here("figures","figure3_turnover_b_estimate.pdf"), width = 7, height = 5)
 
 plot(0,0,type="n",ylim=range(c(wf.b,encode.b,decode.b)),xlim=c(0.5,14.5),axes=F,xlab="",ylab="")
 abline(h=0.86,lty=4)
@@ -254,7 +258,7 @@ dev.off()
 
 
 ## Estimates of b (tiff)
-tiff(file = "../figures/turnover_b_estimate.tiff", width = 7, height = 5,units = "in", res = 300)
+tiff(file = here("figures","figure3_turnover_b_estimate.tiff"), width = 7, height = 5,units = "in", res = 300)
 
 plot(0,0,type="n",ylim=range(c(wf.b,encode.b,decode.b)),xlim=c(0.5,14.5),axes=F,xlab="",ylab="")
 abline(h=0.86,lty=4)
@@ -278,7 +282,7 @@ dev.off()
 
 
 ## Turnover Profile (pdf)
-pdf(file = "../figures/turnover_profile.pdf", width = 9, height = 5)
+pdf(file = here("figures","figure4_turnover_profile.pdf"), width = 9, height = 5)
 par(mfrow=c(1,2))
 plot(1:10,apply(wf.rates,1,mean,na.rm=TRUE),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(encode.rates)),na.rm=TRUE),main="Encoding Error")
 arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
@@ -304,7 +308,7 @@ dev.off()
 
 
 ## Turnover Profile (tiff)
-tiff(file = "../figures/turnover_profile.tiff", width = 9, height = 5,units = "in", res = 300)
+tiff(file = here("figure","figure4_turnover_profile.tiff"), width = 9, height = 5,units = "in", res = 300)
 par(mfrow=c(1,2))
 plot(1:10,apply(wf.rates,1,mean,na.rm=TRUE),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(encode.rates)),na.rm=TRUE),main="Encoding Error")
 arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
@@ -327,11 +331,7 @@ for (i in 1:length(N))
 }
 dev.off()
 
-
-
-
-
-#### Experiment 3
+# Experiment 3 ----
 
 # Expectation Under Neutrality (Figure)
 
@@ -344,8 +344,8 @@ wf.prog.n3000.m01 = wf(N=3000,mu=0.01,warmup=10000,timesteps=20000,output="proge
 wf.prog.n1000.m005 = wf(N=300,mu=0.005,warmup=10000,timesteps=20000,output="progeny")
 wf.prog.n3000.m001 = wf(N=300,mu=0.001,warmup=10000,timesteps=20000,output="progeny")                                             
 
-# WF (pdf)
-pdf(file = "../figures/wrightfisher_progeny.pdf", width = 9, height = 5)
+#
+pdf(file = here("figures","figure1_wrightfisher_progeny.pdf"), width = 9, height = 5)
 
 par(mfrow=c(1,2))
 plot(wf.prog.n300.m01$d2,pch=20,log="xy",ylab="Probability P(k) of number variants >= k",xlab="k",col="darkgrey",type="b")
@@ -362,7 +362,7 @@ dev.off()
 
 
 # WF (tiff)
-tiff(file = "../figures/wrightfisher_progeny.tiff", width = 9, height = 5, units = "in", res = 300)
+tiff(file = here("figures","figure1_wrightfisher_progeny.tiff"), width = 9, height = 5, units = "in", res = 300)
 
 par(mfrow=c(1,2))
 plot(wf.prog.n300.m01$d2,pch=20,log="xy",ylab="Probability P(k) of number variants >= k",xlab="k",col="darkgrey",type="b")
@@ -420,7 +420,7 @@ for (i in 1:length(N))
 legItems.progeny2=c(as.expression("Wright-Fisher"),legItems.progeny2)
 
 # Plot Results (pdf)
-pdf(file = "../figures/objectmediated_progeny.pdf", width = 9, height = 9)
+pdf(file = here("figures","figure5_objectmediated_progeny.pdf"), width = 9, height = 9)
 
 par(mfrow=c(2,2))
 # (decoding error)
@@ -462,8 +462,7 @@ dev.off()
 
 
 # Plot Results (tiff)
-tiff(file = "../figures/objectmediated_progeny.tiff", width = 9, height = 9, units = "in", res = 300)
-
+tiff(file = here("figures","figure5_objectmediated_progeny.tiff"), width = 9, height = 9, units = "in", res = 300)
 
 par(mfrow=c(2,2))
 # (decoding error)
