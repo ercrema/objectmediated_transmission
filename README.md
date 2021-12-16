@@ -9,7 +9,7 @@ Bortolini, E., Crema, E.R., & Lake, M.W. (2021). Object-mediated cultural transm
 * `src.R` ... contains utility functions and simulation code for all experiments presented in the paper.
 * `runscript.R` ... executes all simulations and generates figures presented in the paper.
 * `figures/*.pdf` ... pdf version of all figures in the paper. Generated using scripts contained in `runscript.R`.
-* `esm.Rmd` ... Suplementary material (in Rmarkdown format) containing detaled description of the models and the experiment design.
+* `esm.Rmd` ... Suplementary material (in Rmarkdown format) containing detailed description of the models and the experiment design.
 
 ## Required R packages
 
