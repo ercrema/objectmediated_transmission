@@ -1,9 +1,8 @@
 ---
-title: "Object Mediated Transmission ESM"
-author: "Enrico Crema"
-date: "6 July 2018"
+title: "How cultural transmission through objects impacts inferences about cultural evolution: supplementary material"
+author: "Crema,E.R., Bortolini, E., Lake,M.W."
+date: "20 Dec 2021"
 output: html_document
-bibliography: bibfile.bib
 ---
 
 ```{r, setup, include=FALSE}
@@ -168,7 +167,7 @@ The lower diversity and richness of the object-mediated transmission is however 
 
 ## Turnover Rate
 
-Bentley et al [-@bentley_etal_2007] defined he turnover rate $z$ as the average number of new entires in the list of the top $y$ cultral variants ordered by their absolute frequencies. In particular they noticed that under neutrality $y$ and $z$ have a linear relationship $z=y\sqrt{\mu}$. A subsequent study [@evans_giometto_2011] has shown that this relationship depends also on $N$. When $N\mu < 0.15y$ this was approximately $z=2\cdot N \mu$, and when $N\mu > 0.15y$, $z=d\cdot \mu^{a} y^{b} N^{c}$, with the constants $a=0.55$, $b=0.86$, $c=0.13$ and $d=0.138$. Acerbi and Bentley [-@acerbi_and_bentley_2014] have used simplified this relationship to $z=Ay^b$, so that that $b$ can be estimated from the observed turnover rates, with the expectation that under neutrality this is equivalent to 0.86 in the regions where $N\mu > 0.15y$. 
+Bentley et al 2007[1](https://doi.org/10.1016/j.evolhumbehav.2006.10.002) defined he turnover rate $z$ as the average number of new entires in the list of the top $y$ cultral variants ordered by their absolute frequencies. In particular they noticed that under neutrality $y$ and $z$ have a linear relationship $z=y\sqrt{\mu}$. A subsequent study by Evans and Giometto [2](https://arxiv.org/abs/1105.4044v1) has shown that this relationship depends also on $N$. When $N\mu < 0.15y$ this was approximately $z=2\cdot N \mu$, and when $N\mu > 0.15y$, $z=d\cdot \mu^{a} y^{b} N^{c}$, with the constants $a=0.55$, $b=0.86$, $c=0.13$ and $d=0.138$. Acerbi and Bentley [3](http://dx.doi.org/10.1016/j.evolhumbehav.2014.02.003) have used simplified this relationship to $z=Ay^b$, so that that $b$ can be estimated from the observed turnover rates, with the expectation that under neutrality this is equivalent to 0.86 in the regions where $N\mu > 0.15y$. 
 
 Here we examine whether and how, under an object-mediated transmission regime, estimates of $b$ differ from those expected under neutrality. As for in the first expriment above we explore scenarios with the same number of expected objects under different combinations of $N$ and $\lambda$: 
 
@@ -316,7 +315,7 @@ When $y$ and $z$ are plotted against each other these impressions based on the e
 
 
 ## Progeny Distribution
-Bentley et al [-@bentley_etal_2004] first noted that given a temporal interval $T$, $log(P_k$), the log frequencies of variants appearing $k$ times, follow a power-law distribution under neutrality. It follows that the number of variants occuring once (i.e. $k=1$) within $T$ is far greater than those appearing twice ($k=2$), three times ($k=3$),etc., and that this rate of decline with increasing $k$ can be predicted. O'Dwyler and Kandler [@odwyer_kandler_2017] recently examined the shape of such *progeny distribution* and noticed that:
+Bentley et al [4](https://doi.org/10.1098/rspb.2004.2746) first noted that given a temporal interval $T$, $log(P_k$), the log frequencies of variants appearing $k$ times, follow a power-law distribution under neutrality. It follows that the number of variants occuring once (i.e. $k=1$) within $T$ is far greater than those appearing twice ($k=2$), three times ($k=3$),etc., and that this rate of decline with increasing $k$ can be predicted. O'Dwyler and Kandler[5](https://doi.org/10.1098/rstb.2016.0426) recently examined the shape of such *progeny distribution* and noticed that:
 
 * there is indeed a power law distribution, but with a constant exponent of $-3/2$, which *does not* depend on $N$ and $\mu$;
 * the power law is actually followed by an exponential cut-off;
@@ -476,8 +475,8 @@ As for the decoding error scenario we first explore the effect of different $\la
 The results of the experiment with a constant values for $\lambda \cdot N$ (right panel) shows again how low values of $\lambda$ yield a progeny distribution similar to Wright Fisher model, although with a higher drop in the proportion of variants after $k>1$. In the extreme case of $\lambda=20$ we do not observe any variants between $k=1$ and $k= `r encode.prog.fixobjects[[1]][[1]][2,1]`$, and after that the progeny distribution does follows a different trajectory compared to the Wright-Fisher model.
 
 # References
-
-
-
-
-
+1.Bentley, R.A., Lipo, C.P., Herzog, H.A., Hahn, M.W., 2007. [Regular rates of popular culture change reflect random copying](https://doi.org/10.1016/j.evolhumbehav.2006.10.002). Evolution and Human Behavior 28, 151–158.
+2.Evans, T.S., Giometto, A., 2011. [Turnover Rate of Popularity Charts in Neutral Models](https://arxiv.org/abs/1105.4044v1). arXiv: physics:soc-ph.
+3.Acerbi, A., Bentley, A.R., 2014. [Biases in cultural transmission shape the turnover of populat traits](http://dx.doi.org/10.1016/j.evolhumbehav.2014.02.003). Evolution and Human Behavior 35, 228–236.
+4.Bentley, R.A., Hahn, M.W., Shennan, S.J., 2004. [Random drift and culture change](https://doi.org/10.1098/rspb.2004.2746). Procedings of The Royal Society B 271, 1443–1450.
+5.O’Dwyer, J.P., Kandler, A., 2017. [Inferring processes of cultural transmission: the critical role of rare variants in distinguishing neutrality from novelty biases](https://doi.org/10.1098/rstb.2016.0426). Phil. Trans. R. Soc. B 372, 20160426. 
