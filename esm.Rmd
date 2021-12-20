@@ -475,8 +475,8 @@ As for the decoding error scenario we first explore the effect of different $\la
 The results of the experiment with a constant values for $\lambda \cdot N$ (right panel) shows again how low values of $\lambda$ yield a progeny distribution similar to Wright Fisher model, although with a higher drop in the proportion of variants after $k>1$. In the extreme case of $\lambda=20$ we do not observe any variants between $k=1$ and $k= `r encode.prog.fixobjects[[1]][[1]][2,1]`$, and after that the progeny distribution does follows a different trajectory compared to the Wright-Fisher model.
 
 # References
-1.Bentley, R.A., Lipo, C.P., Herzog, H.A., Hahn, M.W., 2007. [Regular rates of popular culture change reflect random copying](https://doi.org/10.1016/j.evolhumbehav.2006.10.002). Evolution and Human Behavior 28, 151–158.
-2.Evans, T.S., Giometto, A., 2011. [Turnover Rate of Popularity Charts in Neutral Models](https://arxiv.org/abs/1105.4044v1). arXiv: physics:soc-ph.
-3.Acerbi, A., Bentley, A.R., 2014. [Biases in cultural transmission shape the turnover of populat traits](http://dx.doi.org/10.1016/j.evolhumbehav.2014.02.003). Evolution and Human Behavior 35, 228–236.
-4.Bentley, R.A., Hahn, M.W., Shennan, S.J., 2004. [Random drift and culture change](https://doi.org/10.1098/rspb.2004.2746). Procedings of The Royal Society B 271, 1443–1450.
-5.O’Dwyer, J.P., Kandler, A., 2017. [Inferring processes of cultural transmission: the critical role of rare variants in distinguishing neutrality from novelty biases](https://doi.org/10.1098/rstb.2016.0426). Phil. Trans. R. Soc. B 372, 20160426. 
+1. Bentley, R.A., Lipo, C.P., Herzog, H.A., Hahn, M.W., 2007. [Regular rates of popular culture change reflect random copying](https://doi.org/10.1016/j.evolhumbehav.2006.10.002). Evolution and Human Behavior 28, 151–158.
+2. Evans, T.S., Giometto, A., 2011. [Turnover Rate of Popularity Charts in Neutral Models](https://arxiv.org/abs/1105.4044v1). arXiv: physics:soc-ph.
+3. Acerbi, A., Bentley, A.R., 2014. [Biases in cultural transmission shape the turnover of populat traits](http://dx.doi.org/10.1016/j.evolhumbehav.2014.02.003). Evolution and Human Behavior 35, 228–236.
+4. Bentley, R.A., Hahn, M.W., Shennan, S.J., 2004. [Random drift and culture change](https://doi.org/10.1098/rspb.2004.2746). Procedings of The Royal Society B 271, 1443–1450.
+5. O’Dwyer, J.P., Kandler, A., 2017. [Inferring processes of cultural transmission: the critical role of rare variants in distinguishing neutrality from novelty biases](https://doi.org/10.1098/rstb.2016.0426). Phil. Trans. R. Soc. B 372, 20160426. 
