@@ -1,4 +1,4 @@
-# R scripts and Supplementary Material for the Manuscript "Object-mediated cultural transmission and inference"
+# R scripts and Supplementary Material for the Manuscript "How cultural transmission through objects impacts inferences about cultural evolution"
 
 This repository contains the Rmarkdown supplementary material and the R scripts for generating simulation outputs and figures for the manuscript:
 
