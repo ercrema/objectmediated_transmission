@@ -10,12 +10,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, settings_libraries_functions, include=FALSE}
-#Source Functions
-source('../src/src.R')
 # Load Required Packages
 library(foreach)
 library(doParallel)
 library(RColorBrewer)
+library(here)
+
+#Source Functions
+source(here('src.R'))
 ```
 
 
@@ -24,12 +26,12 @@ library(RColorBrewer)
 
 Consider a population of $N$ individuals each associated with a mental template of a cultural variant. At each generation step, each individual produce $n$ copies of a physical realisation of the mental template, with $n$ drawn from a Poisson distribution with intensity $lambda$. After this _production event_ all individuals update their mental template by randomly selecting an object and copying the associated cultural variant. New variants are introduced into the population in two distinct ways:
 
-## Decoding Error <!--This is model A -->
+## Decoding Error
 
 Under this scenario, with probability $\mu_{d}$, the focal individual fails to correctly reconstruct the mental template associated to the object it copies from, and as consequence introduces a new cultural variant in the population of the mental templates. The new variants are introduced following the infinite allele model (i.e. there are 0 probability of convergent error).  
 <!--Is infinite allele realistic here? errors are likely to have some dependency to the target mental template. Perhaps a random step error model is more appropriate? Worth discussing this a least? -->
 
-## Encoding Error <!-- This is model B -->
+## Encoding Error
 
 With probability $\mu_{e}$ an object produced by the focal individual is no longer directly asociated to its parent mental template. As for the decoding error scenario described above new variants are introduced following the infinite allele model. Howeverthe mental template of the focal individual remains unchanged (unless it subsequently select the mutant object in the transmission process) and an individual could produce more than one mutant object, each associated with a different mental template that does not exist in the population of the producers yet.  
 
@@ -285,7 +287,7 @@ legend("topright",legend=c("Object-mediated with encoding error","Object-mediate
 ```{r, plot_turnover_profile,fig.width=9,fig.height=5}
 par(mfrow=c(1,2))
 ## Turnover rate plot
-plot(1:10,apply(wf.rates,1,mean),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(encode.rates))),main="Encoding Error")
+plot(1:10,apply(wf.rates,1,mean),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(encode.rates),na.rm=TRUE)),main="Encoding Error")
 arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025),y1=apply(wf.rates,1,quantile,0.975),length=0)
 
 cc <- brewer.pal(length(N),"Set1") 
@@ -299,7 +301,7 @@ legend("topleft",legend=legItems.turnover,col=c(cc,"black"),pch=20,lty=1,cex=0.8
 
 
 
-plot(1:10,apply(wf.rates,1,mean),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(decode.rates))),main="Decoding Error")
+plot(1:10,apply(wf.rates,1,mean),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(decode.rates)),na.rm=TRUE),main="Decoding Error")
 arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025),y1=apply(wf.rates,1,quantile,0.975),length=0)
 
 cc <- brewer.pal(length(N),"Set1") 
