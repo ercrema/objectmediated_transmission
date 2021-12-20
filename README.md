@@ -2,7 +2,7 @@
 
 This repository contains the Rmarkdown supplementary material and the R scripts for generating simulation outputs and figures for the manuscript:
 
-Bortolini, E., Crema, E.R., & Lake, M.W. (2021). Object-mediated cultural transmission and inference
+Crema, E.R., Bortolini, E. & Lake, M.W. (2021). How cultural transmission through objects impacts inferences about cultural evolution
 
 ## File Structure
 
