@@ -286,13 +286,13 @@ legend("topright",legend=c("Object-mediated with encoding error","Object-mediate
 par(mfrow=c(1,2))
 ## Turnover rate plot
 plot(1:10,apply(wf.rates,1,mean),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(encode.rates),na.rm=TRUE)),main="Encoding Error")
-arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025),y1=apply(wf.rates,1,quantile,0.975),length=0)
+arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
 
 cc <- brewer.pal(length(N),"Set1") 
 for (i in 1:length(N))
 {
 lines(1:10,apply(encode.rates[[i]],1,mean),type="b",pch=20,col=cc[i])  
-arrows(x0=1:10,x1=1:10,y0=apply(encode.rates[[i]],1,quantile,0.025),y1=apply(encode.rates[[i]],1,quantile,0.975),length=0,col=cc[i])
+arrows(x0=1:10,x1=1:10,y0=apply(encode.rates[[i]],1,quantile,0.025,na.rm=TRUE),y1=apply(encode.rates[[i]],1,quantile,0.975,na.rm=TRUE),length=0,col=cc[i])
 }
 
 legend("topleft",legend=legItems.turnover,col=c(cc,"black"),pch=20,lty=1,cex=0.8,bty="n")
@@ -300,13 +300,13 @@ legend("topleft",legend=legItems.turnover,col=c(cc,"black"),pch=20,lty=1,cex=0.8
 
 
 plot(1:10,apply(wf.rates,1,mean),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(decode.rates)),na.rm=TRUE),main="Decoding Error")
-arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025),y1=apply(wf.rates,1,quantile,0.975),length=0)
+arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
 
 cc <- brewer.pal(length(N),"Set1") 
 for (i in 1:length(N))
 {
 lines(1:10,apply(decode.rates[[i]],1,mean),type="b",pch=20,col=cc[i])  
-arrows(x0=1:10,x1=1:10,y0=apply(decode.rates[[i]],1,quantile,0.025),y1=apply(decode.rates[[i]],1,quantile,0.975),length=0,col=cc[i])
+arrows(x0=1:10,x1=1:10,y0=apply(decode.rates[[i]],1,quantile,0.025,na.rm=TRUE),y1=apply(decode.rates[[i]],1,quantile,0.975,na.rm=TRUE),length=0,col=cc[i])
 }
 ```
 
