@@ -41,6 +41,9 @@ res.encode = foreach (i = 1:nrow(pspace.obj), .combine='rbind') %dopar% {
 unlist(objTr(N=pspace.obj$pop[i],lambda=pspace.obj$lambda[i],mu.e=mu.e,mu.d=0,timesteps = 5000,output="sumstat"))}
 pspace.obj.encode = cbind.data.frame(pspace.obj,res.encode)
 
+#stop cluster
+stopCluster(cl)
+
 # Plot 
 cols = brewer.pal(4, 'Set2')
 
@@ -142,7 +145,7 @@ stopCluster(cl)
 
 
 # Plot Results (pdf)
-pdf(file = here("figures","figure2_richnessdiversity.pdf"), width = 8, height = 9)
+pdf(file = here("figures","experiment2_richnessdiversity.pdf"), width = 8, height = 9)
 
 par(mfrow=c(2,1))
 xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
@@ -208,7 +211,7 @@ wf.prog.n1000.m005 = wf(N=300,mu=0.005,warmup=10000,timesteps=20000,output="prog
 wf.prog.n3000.m001 = wf(N=300,mu=0.001,warmup=10000,timesteps=20000,output="progeny")                                             
 
 #
-pdf(file = here("figures","figure1_wrightfisher_progeny.pdf"), width = 9, height = 5)
+pdf(file = here("figures","experiment3_wrightfisher_progeny.pdf"), width = 9, height = 5)
 
 par(mfrow=c(1,2))
 plot(wf.prog.n300.m01$d2,pch=20,log="xy",ylab="Probability P(k) of number variants >= k",xlab="k",col="darkgrey",type="b")
@@ -231,7 +234,7 @@ dev.off()
 mu <- 0.01
 N <- 300
 warmup <- 10000
-timesteps <- warmup + 10000
+timesteps <- warmup * 2
 lambda <- c(0.1,1,5,10)
                  
 decode.prog.varlambda <- vector("list",length=length(lambda))
@@ -240,8 +243,8 @@ legItems.progeny1=vector(length=length(lambda))
 
 for (i in 1:length(lambda))
 {
-  decode.prog.varlambda[[i]] <-objTr(N=N,mu.e=0,mu.d=mu,lambda=lambda[i],warmup=10000,timesteps=20000,output="progeny")
-  encode.prog.varlambda[[i]] <-objTr(N=N,mu.e=mu,mu.d=0,lambda=lambda[i],warmup=10000,timesteps=20000,output="progeny")  
+  decode.prog.varlambda[[i]] <-objTr(N=N,mu.e=0,mu.d=mu,lambda=lambda[i],warmup=warmup,timesteps=timesteps,output="progeny")
+  encode.prog.varlambda[[i]] <-objTr(N=N,mu.e=mu,mu.d=0,lambda=lambda[i],warmup=warmup,timesteps=timesteps,output="progeny")  
   legItems.progeny1[i] = as.expression(bquote(paste(lambda,"=",.(lambda[i]),"; N=",.(N),sep="")))
 }
 
@@ -261,8 +264,8 @@ legItems.progeny2=vector(length=length(N))
 
 for (i in 1:length(N))
 {
-  decode.prog.fixobjects[[i]] <- objTr(N=N[i],mu.e=0,mu.d=mu,lambda=lambda[i],warmup=10000,timesteps=20000,output="progeny")
-  encode.prog.fixobjects[[i]] <- objTr(N=N[i],mu.e=mu,mu.d=0,lambda=lambda[i],warmup=10000,timesteps=20000,output="progeny")  
+  decode.prog.fixobjects[[i]] <- objTr(N=N[i],mu.e=0,mu.d=mu,lambda=lambda[i],warmup=warmup,timesteps=timesteps,output="progeny")
+  encode.prog.fixobjects[[i]] <- objTr(N=N[i],mu.e=mu,mu.d=0,lambda=lambda[i],warmup=warmup,timesteps=timesteps,output="progeny")  
   legItems.progeny2[i] = as.expression(bquote(paste(lambda,"=",.(lambda[i]),"; N=",.(N[i]),sep="")))
 }
 legItems.progeny2=c(as.expression("Wright-Fisher"),legItems.progeny2)
@@ -273,36 +276,36 @@ pdf(file = here("figures","figure5_objectmediated_progeny.pdf"), width = 9, heig
 par(mfrow=c(2,2))
 # (decoding error)
 cc <- brewer.pal(length(lambda),'Set1')
-plot(wf.prog.n300.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="a")
+plot(wf.prog.n300.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="a")
 for (i in 1:length(decode.prog.varlambda))
 {
-  lines(decode.prog.varlambda[[i]]$d2, type="b",pch=20,col=cc[i])
+  lines(decode.prog.varlambda[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n300.m01$d2,lty=4,lwd=2)
+lines(wf.prog.n300.m01$d2.objects,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny1,col=c(1,cc),pch=c(NA,rep(20,length(lambda))),lty=c(4,rep(NA,length(lambda))),lwd=c(2,rep(NA,length(lambda))),bty="n")
 
-plot(wf.prog.n1000.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="b")
+plot(wf.prog.n1000.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="b")
 for (i in 1:length(decode.prog.fixobjects))
 {
-  lines(decode.prog.fixobjects[[i]]$d2, type="b",pch=20,col=cc[i])
+  lines(decode.prog.fixobjects[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n1000.m01$d2,lty=4,lwd=2)
+lines(wf.prog.n1000.m01$d2.objects,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny2,col=c(1,cc),pch=c(NA,rep(20,length(N))),lty=c(4,rep(NA,length(N))),lwd=c(2,rep(NA,length(N))),bty="n")
 
 # (encoding error)
-plot(wf.prog.n300.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="c")
+plot(wf.prog.n300.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="c")
 for (i in 1:length(encode.prog.varlambda))
 {
-  lines(encode.prog.varlambda[[i]]$d2, type="b",pch=20,col=cc[i])
+  lines(encode.prog.varlambda[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n300.m01$d2,lty=4,lwd=2)
+lines(wf.prog.n300.m01$d2.objects,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny1,col=c(1,cc),pch=c(NA,rep(20,length(lambda))),lty=c(4,rep(NA,length(lambda))),lwd=c(2,rep(NA,length(lambda))),bty="n")
 
-plot(wf.prog.n1000.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="d")
+plot(wf.prog.n1000.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="d")
 for (i in 1:length(encode.prog.fixobjects))
 {
-  lines(encode.prog.fixobjects[[i]]$d2, type="b",pch=20,col=cc[i])
+  lines(encode.prog.fixobjects[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n1000.m01$d2,lty=4,lwd=2)
+lines(wf.prog.n1000.m01$d2.objects,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny2,col=c(1,cc),pch=c(NA,rep(20,length(N))),lty=c(4,rep(NA,length(N))),lwd=c(2,rep(NA,length(N))),bty="n")
 dev.off()
