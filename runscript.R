@@ -9,10 +9,100 @@ library(RColorBrewer)
 source('src.R')
 
 # Set Number of Cores 
-ncores <- 6
-
+ncores <- 15
 
 # Experiment 1 ----
+nsim = 1000
+N  = c(100,500,1000)
+L  = c(0.5,1,5,10)
+mu.e =mu.d = mu = 0.01
+pspace.obj = pspace.wf = expand.grid(nsim=1:nsim,lambda=L,pop=N)
+# pspace.wf$N.wf = pspace.wf$lambda * pspace.wf$N
+# pspace.wf = unique(pspace.wf[,-c(2,3)])
+timesteps <- 5000 #number of timesteps
+
+cl <-  makeCluster(ncores)  
+registerDoParallel(cl)
+
+# run models 
+# WF:
+# res.wf = foreach (i = 1:nrow(pspace.wf), .combine='cbind') %dopar% {
+# unlist(wf(N=pspace.wf$N.wf[i],mu=mu,timesteps = 5000,output="sumstat"))
+# }
+# pspace.wf$div = res.wf[1,]
+# pspace.wf$k = res.wf[2,]
+
+# Object Mediated
+res.decode = foreach (i = 1:nrow(pspace.obj), .combine='rbind') %dopar% {
+unlist(objTr(N=pspace.obj$pop[i],lambda=pspace.obj$lambda[i],mu.e=0,mu.d=mu.d,timesteps = 5000,output="sumstat"))}
+pspace.obj.decode = cbind.data.frame(pspace.obj,res.decode)
+
+res.encode = foreach (i = 1:nrow(pspace.obj), .combine='rbind') %dopar% {
+unlist(objTr(N=pspace.obj$pop[i],lambda=pspace.obj$lambda[i],mu.e=mu.e,mu.d=0,timesteps = 5000,output="sumstat"))}
+pspace.obj.encode = cbind.data.frame(pspace.obj,res.encode)
+
+# Plot 
+cols = brewer.pal(4, 'Set2')
+
+pdf(file = here("figures","experiment1_diversity.pdf"), width = 10, height = 4)
+par(mfrow=c(1,3))
+for (i in 1:length(N))
+{
+	tmp.decode = subset(pspace.obj.decode,pop==N[i])	
+	tmp.encode = subset(pspace.obj.encode,pop==N[i])	
+	plot(NULL,xlim=c(0.5,4.5),ylim=c(0,1),xlab=expression(lambda),ylab='Diversity',axes=FALSE,main=paste0('N=',N[i]))
+	for (j in 1:length(L))
+	{
+	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$div.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$div.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$div.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$div.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+# 	points(x=jitter(rep(j-0.30,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$div.obj,pch=20,col=cols[1])
+# 	points(x=jitter(rep(j-0.12,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$div.mental,pch=20,col=cols[2])
+# 	points(x=jitter(rep(j+0.12,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$div.obj,pch=20,col=cols[3])
+# 	points(x=jitter(rep(j+0.30,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$div.mental,pch=20,col=cols[4])
+   	
+	}
+	axis(1,at=c(1,2,3,4),labels=L)
+	axis(2)
+	box()
+}
+
+legend('bottomright',legend=c('Decoding Error - Objects','Decoding Error - Mental Templates','Encoding Error - Objects','Encoding Error - Mental Templates'),fill=cols,bty='n')
+dev.off()
+
+
+pdf(file = here("figures","experiment1_richness.pdf"), width = 10, height = 4)
+par(mfrow=c(1,3))
+maxK = max(c(pspace.obj.decode$k.obj,pspace.obj.decode$k.mental,pspace.obj.encode$k.obj,pspace.obj.encode$k.mental))
+for (i in 1:length(N))
+{
+	tmp.decode = subset(pspace.obj.decode,pop==N[i])	
+	tmp.encode = subset(pspace.obj.encode,pop==N[i])	
+	plot(NULL,xlim=c(0.5,4.5),ylim=c(0,maxK),xlab=expression(lambda),ylab='Richness',axes=FALSE,main=paste0('N=',N[i]))
+	for (j in 1:length(L))
+	{
+	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$k.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$k.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$k.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$k.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+# 	points(x=jitter(rep(j-0.30,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$k.obj,pch=20,col=cols[1])
+# 	points(x=jitter(rep(j-0.12,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$k.mental,pch=20,col=cols[2])
+# 	points(x=jitter(rep(j+0.12,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$k.obj,pch=20,col=cols[3])
+# 	points(x=jitter(rep(j+0.30,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$k.mental,pch=20,col=cols[4])
+	}
+	axis(1,at=c(1,2,3,4),labels=L)
+	axis(2)
+	box()
+	if (i==1)
+	{
+		legend('topleft',legend=c('Decoding Error - Objects','Decoding Error - Mental Templates','Encoding Error - Objects','Encoding Error - Mental Templates'),fill=cols,bty='n')
+	}
+}
+dev.off()
+
+
+# Experiment 2 ----
 
 # parameter settings:
 nsim = 1000 #number of repetitions for each parameter combination
@@ -103,129 +193,6 @@ box()
 text(1,44,"Decoding Error",srt=90,cex=0.8)
 text(2,44,"Enccoding Error",srt=90,cex=0.8)
 dev.off()
-
-
-# Experiment 2 ----
-
-# parameter setting
-nsim = 100 #number of repetitions for each parameter combination
-n.objects = 1000 #target number of objects produced at each timestep 
-N <- c(50,500,1000,2000) #number of individuals (producers)
-lambda <- n.objects/N # production rate
-# create parameter spaces
-pspace = data.frame(N=rep(N,each=nsim), lambda=rep(lambda,each=nsim)) 
-mu.e = mu.d = mu = 0.01 #error rates
-timesteps <- 5500 #number of timesteps
-warmup <- 5000
-top <- 10
-
-#Setup parallel processing using n-1 threads, with n being maximum possible for the specific machine
-cl <-  makeCluster(ncores)  
-registerDoParallel(cl)
-
-#Run Model
-wf.tr = foreach (i=1:nsim) %dopar% {
-tmp=wf(N = n.objects,mu=mu,timesteps=5501,warmup=5000,output="turnover",verbose=FALSE,top=top)
-list(tmp$z.frame[,2],tmp$b)
-}
-
-encode.tr = foreach(i=1:nrow(pspace)) %dopar% {
-tmp=objTr(N = pspace$N[i],lambda=pspace$lambda[i],mu.e=mu.e,mu.d=0,timesteps=5501,warmup=5000,output="turnover",verbose=FALSE,top=top)
-list(tmp$z.frame[,2],tmp$bN,tmp$bNp)  
-}
-
-decode.tr = foreach(i=1:nrow(pspace)) %dopar% {
-tmp=objTr(N = pspace$N[i],lambda=pspace$lambda[i],mu.e=0,mu.d=mu.d,timesteps=5501,warmup=5000,output="turnover",verbose=FALSE,top=top)
-list(tmp$z.frame[,2],tmp$bN,tmp$bNp)  
-}
-
-#stop cluster
-stopCluster(cl)
-
-
-#Post Processing
-wf.rates=matrix(unlist(lapply(wf.tr,'[[',1)),nrow=10)
-wf.b=unlist(lapply(wf.tr,'[[',2))
-
-encode.rates.mat=matrix(unlist(lapply(encode.tr,'[[',1)),nrow=top)
-encode.rates = vector("list",length=length(N))
-encode.b=matrix(unlist(lapply(encode.tr,'[[',2)),nrow=nsim)
-
-decode.rates.mat=matrix(unlist(lapply(decode.tr,'[[',1)),nrow=top)
-decode.rates = vector("list",length=length(N))
-decode.b=matrix(unlist(lapply(decode.tr,'[[',2)),nrow=nsim)
-
-legItems.turnover=vector(length=length(lambda))
-
-
-for (i in 1:length(N))
-{
-  encode.rates[[i]] = encode.rates.mat[,(i*nsim-(nsim-1)):(i*nsim)]
-  decode.rates[[i]] = decode.rates.mat[,(i*nsim-(nsim-1)):(i*nsim)]
-  legItems.turnover[i] = as.expression(bquote(paste(lambda,"=",.(lambda[i]),"; N=",.(N[i]),sep="")))
-}
-
-legItems.turnover = c(legItems.turnover,paste0("Wright-Fisher (N=",n.objects,")"))
-
-                                                                                                                                                                                                                                                               
-# Compute Means and 95% percentiles
-encode.b.hi=apply(encode.b,2,quantile,0.975)
-encode.b.mean=apply(encode.b,2,mean)
-encode.b.lo=apply(encode.b,2,quantile,0.025)
-decode.b.hi=apply(decode.b,2,quantile,0.975)
-decode.b.mean=apply(decode.b,2,mean)
-decode.b.lo=apply(decode.b,2,quantile,0.025)
-wf.b.hi=quantile(wf.b,0.975)
-wf.b.mean=mean(wf.b)
-wf.b.lo=quantile(wf.b,0.025)
-
-# Plot Results
-## Estimates of b (pdf)
-pdf(file = here("figures","figure3_turnover_b_estimate.pdf"), width = 7, height = 5)
-
-plot(0,0,type="n",ylim=range(c(wf.b,encode.b,decode.b)),xlim=c(0.5,14.5),axes=F,xlab="",ylab="")
-abline(h=0.86,lty=4)
-axis(side=1,at=c(1.5,4.5,7.5,10.5,14),labels=c(N,n.objects))
-mtext(side=1,line=2.5,"N")
-axis(side=2)
-axis(side=3,at=c(1.5,4.5,7.5,10.5,14),labels=c(n.objects/N,"NA\n (Wright-Fisher)"))
-mtext(side=3,line=2.5,expression(lambda))
-box()     
-arrows(x0=c(1,4,7,10),x1=c(1,4,7,10),y0=encode.b.lo,y1=encode.b.hi,lty=1,lwd=2,length=0,col="indianred")
-points(c(1,4,7,10),encode.b.mean,pch=20,col="indianred",cex=1.5)
-arrows(x0=c(2,5,8,11),x1=c(2,5,8,11),y0=decode.b.lo,y1=decode.b.hi,lty=1,lwd=2,length=0,col="royalblue")
-points(c(2,5,8,11),decode.b.mean,pch=20,col="royalblue",cex=1.5)
-arrows(x0=14,x1=14,y0=wf.b.lo,y1=wf.b.hi,lwd=2,length=0)
-points(14,wf.b.mean,pch=20,cex=1.5)
-legend("topright",legend=c("Object-mediated with encoding error","Object-mediated with decoding error","Wright-Fisher"),lty=c(1),pch=20,col=c("indianred","royalblue","black"),cex=0.7)
-dev.off()
-
-
-## Turnover Profile (pdf)
-pdf(file = here("figures","figure4_turnover_profile.pdf"), width = 9, height = 5)
-par(mfrow=c(1,2))
-plot(1:10,apply(wf.rates,1,mean,na.rm=TRUE),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(encode.rates)),na.rm=TRUE),main="Encoding Error")
-arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
-cc <- brewer.pal(length(N),"Set1") 
-for (i in 1:length(N))
-{
-  lines(1:10,apply(encode.rates[[i]],1,mean,na.rm=TRUE),type="b",pch=20,col=cc[i])  
-  arrows(x0=1:10,x1=1:10,y0=apply(encode.rates[[i]],1,quantile,0.025,na.rm=TRUE),y1=apply(encode.rates[[i]],1,quantile,0.975,na.rm=TRUE),length=0,col=cc[i])
-}
-legend("topleft",legend=legItems.turnover,col=c(cc,"black"),pch=20,lty=1,cex=0.8,bty="n")
-
-plot(1:10,apply(wf.rates,1,mean,na.rm=TRUE),type="b",xlab="Top",ylab="Turnover Rate",pch=20,ylim=range(c(wf.rates,unlist(decode.rates)),na.rm=TRUE),main="Decoding Error")
-arrows(x0=1:10,x1=1:10,y0=apply(wf.rates,1,quantile,0.025,na.rm=TRUE),y1=apply(wf.rates,1,quantile,0.975,na.rm=TRUE),length=0)
-
-cc <- brewer.pal(length(N),"Set1") 
-for (i in 1:length(N))
-{
-  lines(1:10,apply(decode.rates[[i]],1,mean,na.rm=TRUE),type="b",pch=20,col=cc[i])  
-  arrows(x0=1:10,x1=1:10,y0=apply(decode.rates[[i]],1,quantile,0.025,na.rm=TRUE),y1=apply(decode.rates[[i]],1,quantile,0.975,na.rm=TRUE),length=0,col=cc[i])
-}
-dev.off()
-
-
 
 # Experiment 3 ----
 
