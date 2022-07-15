@@ -271,41 +271,41 @@ for (i in 1:length(N))
 legItems.progeny2=c(as.expression("Wright-Fisher"),legItems.progeny2)
 
 # Plot Results (pdf)
-pdf(file = here("figures","figure5_objectmediated_progeny.pdf"), width = 9, height = 9)
+pdf(file = here("figures","experiment3_objectmediated_progeny.pdf"), width = 9, height = 9)
 
 par(mfrow=c(2,2))
 # (decoding error)
 cc <- brewer.pal(length(lambda),'Set1')
-plot(wf.prog.n300.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="a")
+plot(wf.prog.n300.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="a")
 for (i in 1:length(decode.prog.varlambda))
 {
   lines(decode.prog.varlambda[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n300.m01$d2.objects,lty=4,lwd=2)
+lines(wf.prog.n300.m01$d2,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny1,col=c(1,cc),pch=c(NA,rep(20,length(lambda))),lty=c(4,rep(NA,length(lambda))),lwd=c(2,rep(NA,length(lambda))),bty="n")
 
-plot(wf.prog.n1000.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="b")
+plot(wf.prog.n1000.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="b")
 for (i in 1:length(decode.prog.fixobjects))
 {
   lines(decode.prog.fixobjects[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n1000.m01$d2.objects,lty=4,lwd=2)
+lines(wf.prog.n1000.m01$d2,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny2,col=c(1,cc),pch=c(NA,rep(20,length(N))),lty=c(4,rep(NA,length(N))),lwd=c(2,rep(NA,length(N))),bty="n")
 
 # (encoding error)
-plot(wf.prog.n300.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="c")
+plot(wf.prog.n300.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="c")
 for (i in 1:length(encode.prog.varlambda))
 {
   lines(encode.prog.varlambda[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n300.m01$d2.objects,lty=4,lwd=2)
+lines(wf.prog.n300.m01$d2,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny1,col=c(1,cc),pch=c(NA,rep(20,length(lambda))),lty=c(4,rep(NA,length(lambda))),lwd=c(2,rep(NA,length(lambda))),bty="n")
 
-plot(wf.prog.n1000.m01$d2.objects,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="d")
+plot(wf.prog.n1000.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="d")
 for (i in 1:length(encode.prog.fixobjects))
 {
   lines(encode.prog.fixobjects[[i]]$d2.objects, type="b",pch=20,col=cc[i])
 }
-lines(wf.prog.n1000.m01$d2.objects,lty=4,lwd=2)
+lines(wf.prog.n1000.m01$d2,lty=4,lwd=2)
 legend("bottomleft",legend=legItems.progeny2,col=c(1,cc),pch=c(NA,rep(20,length(N))),lty=c(4,rep(NA,length(N))),lwd=c(2,rep(NA,length(N))),bty="n")
 dev.off()
