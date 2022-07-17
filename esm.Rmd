@@ -27,11 +27,11 @@ Consider a population of $N$ individuals each associated with a mental template 
 
 ## Decoding Error
 
-Under this scenario, with probability $\mu_{d}$, the focal individual fails to correctly reconstruct the mental template associated to the object it copies from, and as consequence introduces a new cultural variant in the population of the mental templates. The new variants are introduced following the infinite allele model (i.e. there are 0 probability of convergent error).  
+Under this scenario, with probability $\mu_d$, the focal individual fails to correctly reconstruct the mental template associated to the object it copies from, and as consequence introduces a new cultural variant in the population of the mental templates. The new variants are introduced following the infinite allele model (i.e. there are 0 probability of convergent error).  
 
 ## Encoding Error
 
-With probability $\mu_{e}$ an object produced by the focal individual is no longer directly associated to its parent mental template. As for the decoding error scenario described above new variants are introduced following the infinite allele model. However, the mental template of the focal individual remains unchanged (unless it subsequently select the mutant object in the transmission process) and an individual could produce more than one mutant object, each associated with a different mental template that does not exist in the population of the producers yet.  
+With probability $\mu_e$ an object produced by the focal individual is no longer directly associated to its parent mental template. As for the decoding error scenario described above new variants are introduced following the infinite allele model. However, the mental template of the focal individual remains unchanged (unless it subsequently select the mutant object in the transmission process) and an individual could produce more than one mutant object, each associated with a different mental template that does not exist in the population of the producers yet.  
 
 ## Model Scheduling and Data Collection
 
@@ -39,11 +39,11 @@ Both models are initiated with $N$ individuals associated with different mental 
 
 1. *Production*. For each agent $i$, $n_i$ identical objects with the same numerical value as the mental template of the agent are created, with $n_i \sim Poisson(\lambda)$.
 
-2. *Encoding Error* With probability $\mu_{e}$, each object value is associated with a new integer value that has not been introduced in the simulation run. 
+2. *Encoding Error* With probability $\mu_e$, each object value is associated with a new integer value that has not been introduced in the simulation run. 
 
 3. *Cultural Transmission*. Each agent randomly selects an object and updates its mental template number with the integer value associated with the object.
 
-4. *Decoding Error* With probability $\mu_{d}$, each agent updates its mental template value with a new number that has not been previously used in the simulation run. This portrays an instance where the individual fails to correctly reconstruct the mental template of an object.
+4. *Decoding Error* With probability $\mu_d$, each agent updates its mental template value with a new number that has not been previously used in the simulation run. This portrays an instance where the individual fails to correctly reconstruct the mental template of an object.
 
 Models are executed first for $T_{burnin}+T_{collection}$ time-steps. The first $T_{burnin} steps ensure that the simulation reach equilibrium conditions. During $T_{collection}$, the frequency of different cultural variants associated to the objects are retained for analysis. 
 
@@ -71,13 +71,13 @@ pspace.obj = expand.grid(nsim=1:nsim,lambda=L,pop=N)
 timesteps <- 5000 #number of timesteps
 ```
 
-```{r,register_clusters_sumstat,include=FALSE}
+```{r,register_clusters_exp1,include=FALSE}
 #Setup parallel processing using n-1 threads, with n being maximum possible for the specific machine
 cl <-  makeCluster(detectCores()-1)  
 registerDoParallel(cl)
 ```
 
-```{r,exection_exp_1}
+```{r,execution_exp_1}
 res.decode = foreach (i = 1:nrow(pspace.obj), .combine='rbind') %dopar% {
 unlist(objTr(N=pspace.obj$pop[i],lambda=pspace.obj$lambda[i],mu.e=0,mu.d=mu.d,timesteps = 5000,output="sumstat"))}
 pspace.obj.decode = cbind.data.frame(pspace.obj,res.decode)
@@ -87,7 +87,7 @@ unlist(objTr(N=pspace.obj$pop[i],lambda=pspace.obj$lambda[i],mu.e=mu.e,mu.d=0,ti
 pspace.obj.encode = cbind.data.frame(pspace.obj,res.encode)
 ```
 
-```{r, close_clusters_sumstat, include=FALSE}
+```{r, close_clusters_exp1, include=FALSE}
 #stop cluster
 stopCluster(cl)
 ```
@@ -116,7 +116,7 @@ for (i in 1:length(N))
 legend('bottomright',legend=c('Decoding Error - Objects','Decoding Error - Mental Templates','Encoding Error - Objects','Encoding Error - Mental Templates'),fill=cols,bty='n')
 ```
 
-```{r,exp1_figure1,results='hide',fig.width= 10, fig.height= 4}
+```{r,exp1_figure2,results='hide',fig.width= 10, fig.height= 4}
 cols = brewer.pal(4, 'Set2')
 par(mfrow=c(1,3))
 maxK = max(c(pspace.obj.decode$k.obj,pspace.obj.decode$k.mental,pspace.obj.encode$k.obj,pspace.obj.encode$k.mental))
@@ -147,7 +147,7 @@ for (i in 1:length(N))
 
 In most real-world situations we do not have estimates of $N$ or $\lambda$, and we simply infer modes of tranmission from the frequency distribution of the observed objects. In experiment 2 we emulate this condition by exploring four different combinations of $\lambda$ and $N$, ensuring that the number of objects produced at each time step was, on average, equal to 1,000. We compare the output of these settings against a conventional Wright-Fisher Infinite Allele model with a population size of 1,000 to determine the consequence of implicitely assuming the population size to be comparable to the the number of objects. Detailed parameter settings are as follows:
 
-```{r, parameters_sumstat}
+```{r, parameters_exp2}
 nsim = 1000 #number of repetitions for each parameter combination
 n.objects = 1000 #target number of objects produced at each time-step 
 N <- c(50,500,1000,2000) #number of individuals (producers)
@@ -158,13 +158,13 @@ mu.e = mu.d = mu = 0.01 #error rates
 timesteps <- 5000 #number of time-steps
 ```
 
-```{r,register_clusters_sumstat,include=FALSE}
+```{r,register_clusters_exp2,include=FALSE}
 #Setup parallel processing using n-1 threads, with n being maximum possible for the specific machine
 cl <-  makeCluster(detectCores()-1)  
 registerDoParallel(cl)
 ```
 
-```{r execution_sumstat}
+```{r execution_exp2}
 res.wf = foreach (i = 1:nsim, .combine='cbind') %dopar% {
   unlist(wf(N=n.objects,mu=mu,timesteps = 5000,output="sumstat"))
 }
@@ -184,13 +184,13 @@ res.encode.k=matrix(res.encode[2,],ncol=length(N),nrow=nsim)
 
 ```
 
-```{r, close_clusters_sumstat, include=FALSE}
+```{r, close_clusters_exp2, include=FALSE}
 #stop cluster
 stopCluster(cl)
 ```
 
 
-```{r,plot_sumstat, results='hide',fig.width= 9, fig.height= 9}
+```{r,plot_res_exp2, results='hide',fig.width= 9, fig.height= 9}
 
 par(mfrow=c(2,1))
 xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
