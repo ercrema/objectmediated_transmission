@@ -29,7 +29,7 @@ registerDoParallel(cl)
 # res.wf = foreach (i = 1:nrow(pspace.wf), .combine='cbind') %dopar% {
 # unlist(wf(N=pspace.wf$N.wf[i],mu=mu,timesteps = 5000,output="sumstat"))
 # }
-# pspace.wf$div = res.wf[1,]
+# pspace.wf$hom = res.wf[1,]
 # pspace.wf$k = res.wf[2,]
 
 # Object Mediated
@@ -47,23 +47,23 @@ stopCluster(cl)
 # Plot 
 cols = brewer.pal(4, 'Set2')
 
-pdf(file = here("figures","experiment1a_diversity.pdf"), width = 10, height = 4)
+pdf(file = here("figures","experiment1a_homogeneity.pdf"), width = 10, height = 4)
 par(mfrow=c(1,3))
 for (i in 1:length(N))
 {
 	tmp.decode = subset(pspace.obj.decode,pop==N[i])	
 	tmp.encode = subset(pspace.obj.encode,pop==N[i])	
-	plot(NULL,xlim=c(0.5,4.5),ylim=c(0,1),xlab=expression(lambda),ylab='Diversity',axes=FALSE,main=paste0('N=',N[i]))
+	plot(NULL,xlim=c(0.5,4.5),ylim=c(0,1),xlab=expression(lambda),ylab='Homogeneity',axes=FALSE,main=paste0('N=',N[i]))
 	for (j in 1:length(L))
 	{
-	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$div.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$div.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$div.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$div.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-# 	points(x=jitter(rep(j-0.30,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$div.obj,pch=20,col=cols[1])
-# 	points(x=jitter(rep(j-0.12,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$div.mental,pch=20,col=cols[2])
-# 	points(x=jitter(rep(j+0.12,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$div.obj,pch=20,col=cols[3])
-# 	points(x=jitter(rep(j+0.30,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$div.mental,pch=20,col=cols[4])
+	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$hom.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$hom.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$hom.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$hom.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+# 	points(x=jitter(rep(j-0.30,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$hom.obj,pch=20,col=cols[1])
+# 	points(x=jitter(rep(j-0.12,nsim),factor=jf),y=subset(tmp.decode,lambda==L[j])$hom.mental,pch=20,col=cols[2])
+# 	points(x=jitter(rep(j+0.12,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$hom.obj,pch=20,col=cols[3])
+# 	points(x=jitter(rep(j+0.30,nsim),factor=jf),y=subset(tmp.encode,lambda==L[j])$hom.mental,pch=20,col=cols[4])
    	
 	}
 	axis(1,at=c(1,2,3,4),labels=L)
@@ -71,7 +71,7 @@ for (i in 1:length(N))
 	box()
 }
 
-legend('bottomright',legend=c('Decoding Error - Objects','Decoding Error - Mental Templates','Encoding Error - Objects','Encoding Error - Mental Templates'),fill=cols,bty='n')
+legend('topright',legend=c('Decoding Error - Objects','Decoding Error - Mental Templates','Encoding Error - Objects','Encoding Error - Mental Templates'),fill=cols,bty='n')
 dev.off()
 
 
@@ -126,17 +126,17 @@ registerDoParallel(cl)
 res.wf = foreach (i = 1:nsim, .combine='cbind') %dopar% {
 unlist(wf(N=rpois(1,n.objects),mu=mu,timesteps = 5000,output="sumstat"))
 }
-res.wf.div = res.wf[1,]
+res.wf.hom = res.wf[1,]
 res.wf.k = res.wf[2,]
 
 res.decode = foreach (i = 1:nrow(pspace), .combine='cbind') %dopar% {
 unlist(objTr(N=pspace$N[i],lambda=pspace$lambda[i],mu.e=0,mu.d=mu.d,timesteps = 5000,output="sumstat"))}
-res.decode.div=matrix(res.decode[1,],ncol=length(N),nrow=nsim)
+res.decode.hom=matrix(res.decode[1,],ncol=length(N),nrow=nsim)
 res.decode.k=matrix(res.decode[2,],ncol=length(N),nrow=nsim)
 
 res.encode = foreach (i = 1:nrow(pspace), .combine='cbind') %dopar% {
 unlist(objTr(N=pspace$N[i],lambda=pspace$lambda[i],mu.e=mu.e,mu.d=0,timesteps = 5000,output="sumstat"))}
-res.encode.div=matrix(res.encode[1,],ncol=length(N),nrow=nsim)
+res.encode.hom=matrix(res.encode[1,],ncol=length(N),nrow=nsim)
 res.encode.k=matrix(res.encode[2,],ncol=length(N),nrow=nsim)
 
 #stop cluster
@@ -145,24 +145,24 @@ stopCluster(cl)
 
 
 # Plot Results (pdf)
-pdf(file = here("figures","experiment1b_richnessdiversity.pdf"), width = 8, height = 9)
+pdf(file = here("figures","experiment1b_richnesshomogeneity.pdf"), width = 8, height = 9)
 
 par(mfrow=c(2,1))
 xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
 
-# Diversity
-ys.div=(c(res.decode.div,res.encode.div,res.wf.div))
+# Homogeneity
+ys.hom=(c(res.decode.hom,res.encode.hom,res.wf.hom))
 
-lo.div=quantile(res.wf.div,0.025)
-hi.div=quantile(res.wf.div,0.975)
-col.div=vector(length=length(ys.div))
+lo.hom=quantile(res.wf.hom,0.025)
+hi.hom=quantile(res.wf.hom,0.975)
+col.hom=vector(length=length(ys.hom))
 
-col.div[ys.div>=lo.div&ys.div<=hi.div]=rgb(0,0,0,0.05)
-col.div[ys.div<=lo.div]=add.alpha("royalblue",0.05)
-col.div[ys.div>=hi.div]=add.alpha("indianred",0.05)
+col.hom[ys.hom>=lo.hom&ys.hom<=hi.hom]=rgb(0,0,0,0.05)
+col.hom[ys.hom<=lo.hom]=add.alpha("royalblue",0.05)
+col.hom[ys.hom>=hi.hom]=add.alpha("indianred",0.05)
 
-plot(xs,ys.div,col=col.div,pch=20,axes=F,xlab="",ylab="Diversity")
-abline(h=c(lo.div,hi.div),col=c("royalblue","indianred"),lty=4)
+plot(xs,ys.hom,col=col.hom,pch=20,axes=F,xlab="",ylab="Homogeneity")
+abline(h=c(lo.hom,hi.hom),col=c("royalblue","indianred"),lty=4)
 axis(side=1,at=c(1.5,4.5,7.5,10.5,14),labels=c(N,n.objects))
 mtext(side=1,line=2.5,"N")
 axis(side=2)
@@ -170,8 +170,8 @@ axis(side=3,at=c(1.5,4.5,7.5,10.5,14),labels=c(n.objects/N,"NA\n (Wright-Fisher)
 mtext(side=3,line=2.5,expression(lambda))
 box()
 
-text(4,0.2,"Decoding Error",srt=90,cex=0.8)
-text(5,0.2,"Enccoding Error",srt=90,cex=0.8)
+text(4,0.8,"Decoding Error",srt=90,cex=0.8)
+text(5,0.8,"Enccoding Error",srt=90,cex=0.8)
 
 # Richness
 ys.k=(c(res.decode.k,res.encode.k,res.wf.k))
