@@ -57,9 +57,9 @@ For comparative purposes we also simulated the outputs of a Wright-Fisher model 
 
 We compared the output of our three scenarios (wright-fisher, unbiased object-mediated transmission with encoding error, and unbiased object-mediated transmission with decoding error) using different descriptive statistics and visualisation techniques (diversity, richness, and progeny distribution) employed in cultural evolutionary studies.
 
-## Experiment 1
+## Experiment 1a
 
-In experiment 1 we ran our simulations using different combinations of population size $N$ and production rate $\lambda$ for each of the two error type (i.e., encoding and decoding), and recorded the richness $k$ (the number of unique variants) and diversity $D$ (Simpson's Index, equivalent to $1-\sum_{i}^{k}p_{i}^2$, with $p_i$ being the proportion of the $i$-th variant) for the population of objects and mental templates. We used the following parameter settings, recording the two summary statistics after 5,000 time-steps.
+In experiment 1a we ran our simulations using different combinations of population size $N$ and production rate $\lambda$ for each of the two error type (i.e., encoding and decoding), and recorded the richness $k$ (the number of unique variants) and diversity $D$ (Simpson's Index, equivalent to $1-\sum_{i}^{k}p_{i}^2$, with $p_i$ being the proportion of the $i$-th variant) for the population of objects and mental templates. We used the following parameter settings, recording the two summary statistics after 5,000 time-steps.
 
 ```{r,parameter_setting_exp1}
 nsim = 1000 #number of repetitions for each parameter combination
@@ -143,9 +143,9 @@ for (i in 1:length(N))
 ```
 
 
-## Experiment 2
+## Experiment 1b
 
-In most real-world situations we do not have estimates of $N$ or $\lambda$, and we simply infer modes of transmission from the frequency distribution of the observed objects. In experiment 2 we emulate this condition by exploring four different combinations of $\lambda$ and $N$, ensuring that the number of objects produced at each time step was, on average, equal to 1,000. We compare the output of these settings against a conventional Wright-Fisher Infinite Allele model with a population size of 1,000 to determine the consequence of implicitly assuming the population size to be comparable to the number of objects. Detailed parameter settings are as follows:
+In most real-world situations we do not have estimates of $N$ or $\lambda$, and we simply infer modes of transmission from the frequency distribution of the observed objects. In experiment 1b we emulate this condition by exploring four different combinations of $\lambda$ and $N$, ensuring that the number of objects produced at each time step was, on average, equal to 1,000. We compare the output of these settings against a conventional Wright-Fisher Infinite Allele model with a population size randomly drawn from a Poisson distribution with the same intensity 1,000 to determine the consequence of implicitly assuming the population size to be comparable, on average, to the number of objects. Detailed parameter settings are as follows:
 
 ```{r, parameters_exp2}
 nsim = 1000 #number of repetitions for each parameter combination
@@ -166,7 +166,7 @@ registerDoParallel(cl)
 
 ```{r execution_exp2}
 res.wf = foreach (i = 1:nsim, .combine='cbind') %dopar% {
-  unlist(wf(N=n.objects,mu=mu,timesteps = 5000,output="sumstat"))
+  unlist(wf(N=rpois(1,n.objects),mu=mu,timesteps = 5000,output="sumstat"))
 }
 res.wf.div = res.wf[1,]
 res.wf.k = res.wf[2,]

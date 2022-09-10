@@ -11,7 +11,7 @@ source('src.R')
 # Set Number of Cores 
 ncores <- 15
 
-# Experiment 1 ----
+# Experiment 1a ----
 nsim = 1000
 N  = c(100,500,1000)
 L  = c(0.5,1,5,10)
@@ -47,7 +47,7 @@ stopCluster(cl)
 # Plot 
 cols = brewer.pal(4, 'Set2')
 
-pdf(file = here("figures","experiment1_diversity.pdf"), width = 10, height = 4)
+pdf(file = here("figures","experiment1a_diversity.pdf"), width = 10, height = 4)
 par(mfrow=c(1,3))
 for (i in 1:length(N))
 {
@@ -75,7 +75,7 @@ legend('bottomright',legend=c('Decoding Error - Objects','Decoding Error - Menta
 dev.off()
 
 
-pdf(file = here("figures","experiment1_richness.pdf"), width = 10, height = 4)
+pdf(file = here("figures","experiment1a_richness.pdf"), width = 10, height = 4)
 par(mfrow=c(1,3))
 maxK = max(c(pspace.obj.decode$k.obj,pspace.obj.decode$k.mental,pspace.obj.encode$k.obj,pspace.obj.encode$k.mental))
 for (i in 1:length(N))
@@ -105,7 +105,7 @@ for (i in 1:length(N))
 dev.off()
 
 
-# Experiment 2 ----
+# Experiment 1b ----
 
 # parameter settings:
 nsim = 1000 #number of repetitions for each parameter combination
@@ -124,7 +124,7 @@ registerDoParallel(cl)
 
 # run models
 res.wf = foreach (i = 1:nsim, .combine='cbind') %dopar% {
-unlist(wf(N=n.objects,mu=mu,timesteps = 5000,output="sumstat"))
+unlist(wf(N=rpois(1,n.objects),mu=mu,timesteps = 5000,output="sumstat"))
 }
 res.wf.div = res.wf[1,]
 res.wf.k = res.wf[2,]
@@ -145,7 +145,7 @@ stopCluster(cl)
 
 
 # Plot Results (pdf)
-pdf(file = here("figures","experiment2_richnessdiversity.pdf"), width = 8, height = 9)
+pdf(file = here("figures","experiment1b_richnessdiversity.pdf"), width = 8, height = 9)
 
 par(mfrow=c(2,1))
 xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
@@ -197,7 +197,7 @@ text(1,44,"Decoding Error",srt=90,cex=0.8)
 text(2,44,"Enccoding Error",srt=90,cex=0.8)
 dev.off()
 
-# Experiment 3 ----
+# Experiment 2 ----
 
 # Expectation Under Neutrality (Figure)
 
@@ -211,7 +211,7 @@ wf.prog.n1000.m005 = wf(N=300,mu=0.005,warmup=10000,timesteps=20000,output="prog
 wf.prog.n3000.m001 = wf(N=300,mu=0.001,warmup=10000,timesteps=20000,output="progeny")                                             
 
 #
-pdf(file = here("figures","experiment3_wrightfisher_progeny.pdf"), width = 9, height = 5)
+pdf(file = here("figures","experiment2_wrightfisher_progeny.pdf"), width = 9, height = 5)
 
 par(mfrow=c(1,2))
 plot(wf.prog.n300.m01$d2,pch=20,log="xy",ylab="Probability P(k) of number variants >= k",xlab="k",col="darkgrey",type="b")
@@ -271,7 +271,7 @@ for (i in 1:length(N))
 legItems.progeny2=c(as.expression("Wright-Fisher"),legItems.progeny2)
 
 # Plot Results (pdf)
-pdf(file = here("figures","experiment3_objectmediated_progeny.pdf"), width = 9, height = 9)
+pdf(file = here("figures","experiment2_objectmediated_progeny.pdf"), width = 9, height = 9)
 
 par(mfrow=c(2,2))
 # (decoding error)
