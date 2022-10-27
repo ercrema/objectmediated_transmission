@@ -1,12 +1,13 @@
 ---
 title: "How cultural transmission through objects impacts inferences about cultural evolution: supplementary material"
 author: "Crema,E.R., Bortolini, E., Lake,M.W."
-date: "17 Jul 2022"
+date: "27 October 2022"
 output: html_document
 ---
 
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(scipen=9999)
 ```
 
 ```{r, settings_libraries_functions, include=FALSE}
@@ -242,7 +243,7 @@ text(1,44,"Decoding Error",srt=90,cex=0.8)
 text(2,44,"Encoding Error",srt=90,cex=0.8)
 ```
 
-Richness showed consistently lower values, whilst homogeneity showed higher values compared to the Wright-Fisher model for both versions of object-mediated transmission, even in situations where $N$ was larger than the value set for the Wright-Fisher model. With lower values of $N$ (and consequently in this case higher values of $\lambda$) the number of mental templates is limited and hence there is constraint in the amount of variability in the system. For example under the decoding error scenario with $N=$ `r N[1]` the highest richness values possible (assuming all individuals have a different mental template) is `r N[1]` ($k=N$), whilst the lowest homogeneity value is `r (1/N[1])^2` ($\left(\frac{1}{N}\right)^{2}N$). Under the encoding error scenario the values are higher for richness (limited approximately to $N+\lambda N\mu_{e}$, in this case `r round(N[1] + lambda[1]*N[1]*mu.e)`) and just slightly lower for homogeneity, capped approximately at $\left( \frac{(1-\mu_e)}{N} \right)^2N+\left(\frac{1}{\lambda N}\right)^2\lambda N \mu_e$ (equal to `r N[1]*((1-mu.e)/N[1])^2+(1/(lambda[1]*N[1]))^2*lambda[1]*N[1]*mu.e`). In both cases the difference is dictated by $\mu_e$ (higher values lead to lower homogeneity) and $\lambda$ (higher values lead to higher homogeneity). These differences (or lack thereof) can be observed when we compare the two forms of error for each parameter combination of objected-mediated transmission. 
+Richness showed consistently lower values, whilst homogeneity showed higher values compared to the Wright-Fisher model for both versions of object-mediated transmission, even in situations where $N$ was larger than the value set for the Wright-Fisher model. With lower values of $N$ (and consequently in this case higher values of $\lambda$) the number of mental templates is limited and hence there is constraint in the amount of variability in the system. For example under the decoding error scenario with $N=$ `r N[1]` the highest richness values possible (assuming all individuals have a different mental template) is `r N[1]` ($k=N$), whilst the lowest homogeneity value is `r N*(1/N[1])^2` ($\left(\frac{1}{N}\right)^{2}N$). Under the encoding error scenario the values are higher for richness (limited approximately to $N+\lambda N\mu_{e}$, in this case `r round(N[1] + lambda[1]*N[1]*mu.e)`) and just slightly lower for homogeneity, capped approximately at $\left( \frac{(1-\mu_e)}{N} \right)^2N+\left(\frac{1}{\lambda N}\right)^2\lambda N \mu_e$ (equal to `r N[1]*((1-mu.e)/N[1])^2+(1/(lambda[1]*N[1]))^2*lambda[1]*N[1]*mu.e`). In both cases the difference is dictated by $\mu_e$ (higher values lead to lower homogeneity) and $\lambda$ (higher values lead to higher homogeneity). These differences (or lack thereof) can be observed when we compare the two forms of error for each parameter combination of objected-mediated transmission. 
 The higher homogeneity and lower richness of the object-mediated transmission is, however, not just explained by the combination of low $N$ and high $\lambda$. In two of the parameter combinations we considered instances where the $N$ was equal or higher for the object mediated transmission, yet homogentiy yielded higher and richness yielded lower figures. This is explained by the additional drift caused by stochasticity in the production event. For example with $\lambda=1$, approximately `r round(dpois(0,1)*100,2)`% of the individuals will not produce an object, limiting the amount of richness and diversity that could be potentially realised.
 
 
