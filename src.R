@@ -26,7 +26,7 @@ add.alpha <- function(col, alpha=1){
 # warmup ... number of discarded simulation runs
 # timesteps ... number of timesteps
 # output ... output of analysis:
-#	* sumstat... computes diversity and richness for the final timestep
+#	* sumstat... computes homogeneity and richness for the final timestep
 #	* progeny ... creates a progeny distribution
 
 objTr <- function(N,mu.e,mu.d,lambda,timesteps,output=c("sumstat","progeny"),warmup=0,verbose=F)
@@ -98,7 +98,7 @@ objTr <- function(N,mu.e,mu.d,lambda,timesteps,output=c("sumstat","progeny"),war
 		if (verbose) {print("Computing Diversity and Richness ...")}
 		p.objects = table(samplePool)/length(samplePool)
 		p.mental = table(mental.templates)/length(mental.templates)
-		return(list(div.obj=1-sum(p.objects^2),k.obj=length(p.objects),div.mental=1-sum(p.mental^2),k.mental=length(p.mental)))
+		return(list(hom.obj=sum(p.objects^2),k.obj=length(p.objects),hom.mental=sum(p.mental^2),k.mental=length(p.mental)))
 	}
 
 	if (output=="progeny")
@@ -133,7 +133,7 @@ objTr <- function(N,mu.e,mu.d,lambda,timesteps,output=c("sumstat","progeny"),war
 # warmup ... number of discarded simulation runs
 # timesteps ... number of timesteps
 # output ... output of analysis:
-#	* sumstat... computes diversity and richness for the final timestep
+#	* sumstat... computes homogeneity and richness for the final timestep
 #	* turnover ... carries out turnover rate analysis
 #	* progeny ... creates a progeny distribution
 
@@ -191,9 +191,9 @@ wf  <- function(N,mu,timesteps,output=c("sumstat","progeny"),warmup=0,verbose=FA
 	# Output calculation
 	if (output=="sumstat")
 	{
-		if(verbose){print("computing diversity and richness...")}
+		if(verbose){print("computing homogeneity and richness...")}
 		p=table(samplePool)/length(samplePool)
-		return(list(div=1-sum(p^2),k=length(p)))
+		return(list(hom=sum(p^2),k=length(p)))
 	}
 
 	if (output=="progeny")
