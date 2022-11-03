@@ -7,8 +7,10 @@ Crema, E.R., Bortolini, E. & Lake, M.W. (2022). How cultural transmission throug
 ## File Structure
 
 * `src.R` ... contains utility functions and simulation code for all experiments presented in the paper.
-* `runscript.R` ... executes all simulations and generates figures presented in the paper.
-* `figures/*.pdf` ... pdf version of all figures in the paper. Generated using scripts contained in `runscript.R`.
+* `runscript.R` ... executes all simulations.
+* `simres.RData` ... R image file containing the simulation outputs (generated from `runscript.R`)
+* `makefigures.R` ... generates figures.
+* `figures/*.pdf` ... pdf version of all figures in the paper. Generated using scripts contained in `makefigures.R`.
 * `esm.Rmd` ... Suplementary material (in Rmarkdown format) containing detailed description of the models and the experiment design.
 * `esm.html` ... [Rendered version](https://htmlpreview.github.io/?https://github.com/ercrema/objectmediated_transmission/blob/main/esm.html) of `esm.Rmd`.
 
