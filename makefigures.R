@@ -15,9 +15,8 @@ N = c(100,500,1000)
 L = c(0.5,1,5,10)
 mu.e = mu.d = mu = 0.01
 cols = brewer.pal(4, 'Set2')
-
-pdf(file = here("figures","experiment1a_homogeneity.pdf"), width = 10, height = 4)
-par(mfrow=c(1,3))
+pdf(file = here("figures","experiment1a_homogeneity.pdf"), width = 6.8, height = 2.72,pointsize=10)
+par(mfrow=c(1,3),mar=c(5,4,2,1))
 for (i in 1:length(N))
 {
 	tmp.decode = subset(pspace.obj.decode,pop==N[i])	
@@ -25,22 +24,22 @@ for (i in 1:length(N))
 	plot(NULL,xlim=c(0.5,4.5),ylim=c(0,1),xlab=expression(lambda),ylab='Homogeneity',axes=FALSE,main=paste0('N=',N[i]))
 	for (j in 1:length(L))
 	{
-	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$hom.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$hom.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$hom.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$hom.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$hom.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
+	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$hom.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
+	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$hom.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
+	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$hom.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
 	}
 	axis(1,at=c(1,2,3,4),labels=L)
 	axis(2)
 	box()
 }
 
-legend('topright',legend=c('Decoding Error - Objects','Decoding Error - Mental Representations','Encoding Error - Objects','Encoding Error - Mental Representations'),fill=cols,bty='n')
+legend('topright',legend=c('Decoding Error - Objects','Decoding Error - Mental Representations','Encoding Error - Objects','Encoding Error - Mental Representations'),fill=cols,bty='n',cex=0.85)
 dev.off()
 
 
-pdf(file = here("figures","experiment1a_richness.pdf"), width = 10, height = 4)
-par(mfrow=c(1,3))
+pdf(file = here("figures","experiment1a_richness.pdf"), width = 6.8, height = 2.72,pointsize=10)
+par(mfrow=c(1,3),mar=c(5,4,2,1))
 maxK = max(c(pspace.obj.decode$k.obj,pspace.obj.decode$k.mental,pspace.obj.encode$k.obj,pspace.obj.encode$k.mental))
 for (i in 1:length(N))
 {
@@ -49,17 +48,17 @@ for (i in 1:length(N))
 	plot(NULL,xlim=c(0.5,4.5),ylim=c(0,maxK),xlab=expression(lambda),ylab='Richness',axes=FALSE,main=paste0('N=',N[i]))
 	for (j in 1:length(L))
 	{
-	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$k.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$k.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$k.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
-	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$k.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1)
+	boxplot(at=j-0.32,x=subset(tmp.decode,lambda==L[j])$k.obj,col=cols[1],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
+	boxplot(at=j-0.12,x=subset(tmp.decode,lambda==L[j])$k.mental,col=cols[2],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
+	boxplot(at=j+0.12,x=subset(tmp.encode,lambda==L[j])$k.obj,col=cols[3],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
+	boxplot(at=j+0.32,x=subset(tmp.encode,lambda==L[j])$k.mental,col=cols[4],add=T,axes=F,boxwex=0.3,outline=FALSE,whisklty=1,lwd=0.5)
 	}
 	axis(1,at=c(1,2,3,4),labels=L)
 	axis(2)
 	box()
 	if (i==1)
 	{
-		legend('topleft',legend=c('Decoding Error - Objects','Decoding Error - Mental Representations','Encoding Error - Objects','Encoding Error - Mental Representations'),fill=cols,bty='n')
+		legend('topright',legend=c('Decoding Error - Objects','Decoding Error - Mental Representations','Encoding Error - Objects','Encoding Error - Mental Representations'),fill=cols,bty='n',cex=0.85)
 	}
 }
 dev.off()
@@ -72,7 +71,7 @@ N = c(50,500,100,2000)
 lambda = n.objects/N
 pspace = data.frame(N=rep(N,each=nsim),lambda=rep(lambda,each=nsim))
 timesteps = 5000
-pdf(file = here("figures","experiment1b_richnesshomogeneity.pdf"), width = 8, height = 9)
+pdf(file = here("figures","experiment1b_richnesshomogeneity.pdf"), width = 6.8, height = 7.65,pointsize=10)
 
 par(mfrow=c(2,1))
 xs=jitter(rep(c(1,4,7,10,2,5,8,11,14),each=nsim),factor=1.2)
@@ -130,9 +129,9 @@ N = 300
 mu = 0.01
 
 ## Wright Fisher Progeny
-pdf(file = here("figures","experiment2_wrightfisher_progeny.pdf"), width = 9, height = 5)
+pdf(file = here("figures","experiment2_wrightfisher_progeny.pdf"), width = 6.8, height = 3.5,pointsize=10)
 
-par(mfrow=c(1,2))
+par(mfrow=c(1,2),mar=c(5,4,1,1))
 plot(wf.prog.n300.m01$d2,pch=20,log="xy",ylab="Probability P(k) of number variants >= k",xlab="k",col="darkgrey",type="b")
 lines(wf.prog.n1000.m01$d2,pch=2,col="indianred",type="b")
 lines(wf.prog.n3000.m01$d2,pch=3,col="royalblue",type="b")
@@ -151,9 +150,9 @@ N = c(50,500,1000,2000)
 lambda = n.objects/N
 
 
-pdf(file = here("figures","experiment2_objectmediated_progeny.pdf"), width = 9, height = 9)
+pdf(file = here("figures","experiment2_objectmediated_progeny.pdf"), width = 6.8, height = 6.8,pointsize=10)
 
-par(mfrow=c(2,2))
+par(mfrow=c(2,2),mar=c(5,4,2,1))
 # (decoding error)
 cc <- brewer.pal(length(lambda),'Set1')
 plot(wf.prog.n300.m01$d2,type="n",lty=4,log="xy",ylab="Probability P(k) of number progeny >= k",xlab="k",col="darkgrey",main="a")
