@@ -2,7 +2,7 @@
 
 This repository contains the Rmarkdown supplementary material and the R scripts for generating simulation outputs and figures for the manuscript:
 
-Crema, E.R., Bortolini, E. & Lake, M.W. (2023). How cultural transmission through objects impacts inferences about cultural evolution. _Journal of Archaeological Method and Theory.
+Crema, E.R., Bortolini, E. & Lake, M.W. (2023). How cultural transmission through objects impacts inferences about cultural evolution. _Journal of Archaeological Method and Theory_.
 
 ## File Structure
 
