@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/424666838.svg)](https://zenodo.org/badge/latestdoi/424666838)
+
 # R scripts and Supplementary Material for the Manuscript "How cultural transmission through objects impacts inferences about cultural evolution"
 
 This repository contains the Rmarkdown supplementary material and the R scripts for generating simulation outputs and figures for the manuscript:
